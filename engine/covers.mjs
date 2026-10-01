@@ -88,8 +88,9 @@ export function ambienceStem({ windows, resolved, cfg, cutDurMs, voiceLufs, out 
     chains.push(`[${k}:a]aresample=48000,aformat=channel_layouts=mono,volume=${gain.toFixed(2)}dB,afade=t=in:d=0.15,afade=t=out:st=${Math.max(0, d / 1000 - 0.2).toFixed(3)}:d=0.2,adelay=${w.ws}:all=1[m${k}]`);
     used.push({ media: r.cover.media, at_ms: w.ws, dur_ms: d, measured_lufs: Number.isFinite(I) ? I : null, gain_db: +gain.toFixed(2), relative_db: rel });
   });
-  chains.push(`${keep.map((_, k) => `[m${k}]`).join("")}amix=inputs=${keep.length}:normalize=0:duration=longest,apad=whole_dur=${sec(cutDurMs)},atrim=end=${sec(cutDurMs)}[a]`);
-  ffmpeg([...inputs, "-filter_complex", chains.join(";"), "-map", "[a]", "-ac", "1", "-ar", "48000", "-c:a", "pcm_s16le", out]);
+  chains.push(`${keep.map((_, k) => `[m${k}]`).join("")}amix=inputs=${keep.length}:normalize=0:duration=longest,asetpts=N/SR/TB,apad=whole_dur=${sec(cutDurMs)}[a]`);
+  // NOTE: no atrim after adelay/amix — it misreads the shifted timestamps and moved kept sound to the start (found in the r002 check); cut with -t instead
+  ffmpeg([...inputs, "-filter_complex", chains.join(";"), "-map", "[a]", "-ac", "1", "-ar", "48000", "-c:a", "pcm_s16le", "-t", sec(cutDurMs), out]);
   log(`B-ROLL SOUND: kept on ${used.length} cover(s); everything else muted`);
   return { file: out, used };
 }

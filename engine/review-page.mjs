@@ -32,7 +32,7 @@ export function reviewHtml(d, { preview = null, approved = false } = {}) {
 <h2>Soundtrack</h2><div class="card">${sound}<br>Hook: ${esc(d.presentation.hook)} · interludes: ${d.presentation.interludes ? "on" : "off"} · grade: ${esc(d.presentation.grade)}</div>
 ${d.editorial_notes ? `<h2>Editorial notes</h2><div class="card">${esc(d.editorial_notes)}</div>` : ""}${d.notes.length ? `<p class="note">${d.notes.map(esc).join("<br>")}</p>` : ""}
 <p class="note">Approve this plan with <code>video-loop approve &lt;project&gt;</code>. Feedback goes back to your agent; it writes the next revision.</p>`;
-  return page(`${d.title} — ${d.revision}`, body, `<style>.play{position:absolute;left:8px;bottom:8px;background:#000c;color:#fff;border:0}</style>${script(d, preview)}`);
+  return page(`${d.title} — ${d.revision}`, body + script(d, preview), `<style>.play{position:absolute;left:8px;bottom:8px;background:#000c;color:#fff;border:0}</style>`);   // script last: it needs the player
 }
 
 function script(d, preview) {

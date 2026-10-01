@@ -21,4 +21,4 @@ button{font:inherit;padding:6px 12px;border-radius:8px;border:1px solid var(--li
 textarea{width:100%;min-height:70px;font:inherit;padding:8px;border-radius:8px;border:1px solid var(--line)}
 code{background:#f0f0f2;padding:1px 5px;border-radius:4px}`;
 
-export const page = (title, body, extraHead = "") => `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(title)}</title><style>${CSS}</style>${extraHead}</head><body><main>${body}</main></body></html>`;
+export const page = (title, body, extraHead = "") => `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="icon" href="data:,"><title>${esc(title)}</title><style>${CSS}</style>${extraHead}</head><body><main>${body}</main></body></html>`;
