@@ -10,13 +10,13 @@ import { probeMedia, durationMs } from "./probe.mjs";
 import { measureLoudness } from "./loudness.mjs";
 import { ffmpeg, ffmpegStderr, ensureDir, sec, tc } from "./util.mjs";
 
-/** Fraction of each frame that is the placeholder colour (magenta), via a mask + signalstats. */
+/** Frames that are mostly the placeholder colour (magenta). Covers always fill the whole frame, so a planning gap shows as a whole placeholder frame; a threshold of 60% ignores real magenta in footage. */
 export function placeholderFrames(file) {
   const txt = ffmpegStderr(["-i", file, "-vf", "scale=90:160,format=yuv444p,geq=lum='if(gt(cb(X,Y),190)*gt(cr(X,Y),205),255,0)':cb=128:cr=128,signalstats,metadata=print:key=lavfi.signalstats.YAVG", "-an", "-f", "null", "-"]);
   const out = []; let t = null;
   for (const l of txt.split("\n")) {
     const f = l.match(/pts_time:([\d.]+)/); if (f) { t = +f[1]; continue; }
-    const y = l.match(/YAVG=([\d.]+)/); if (y && t != null) { const frac = +y[1] / 255; if (frac > 0.005) out.push({ t_s: t, fraction: +frac.toFixed(3) }); }
+    const y = l.match(/YAVG=([\d.]+)/); if (y && t != null) { const frac = +y[1] / 255; if (frac > 0.6) out.push({ t_s: t, fraction: +frac.toFixed(3) }); }
   }
   return out;
 }

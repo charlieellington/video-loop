@@ -16,6 +16,8 @@ export const GRADES = {
   warm: "colortemperature=temperature=5700:mix=0.65:pl=0.6,curves=all='0/0.018 0.20/0.21 0.50/0.515 0.80/0.81 1/0.985':interp=pchip,eq=saturation=0.90:contrast=1.015",
 };
 export const tolerance = (n) => 100 + Math.max(0, n - 10) * 4;   // ±100 ms + 4 ms per join beyond ten
+/** Standard-colour tags on every frame (encoders take colour info from frames, not only from options). */
+export const BT709 = "setparams=color_primaries=bt709:color_trc=bt709:colorspace=bt709:range=tv";
 export const HDR_TONEMAP = "zscale=t=linear:npl=203,format=gbrpf32le,tonemap=tonemap=hable:desat=0,zscale=p=bt709:t=bt709:m=bt709:r=tv,format=yuv420p";
 
 /** Even render size for a scale factor. */
@@ -47,7 +49,7 @@ export function renderPicture({ cuts, spine, cfg, scale, out, hdr = false }) {
     parts.push(`[f${k}]${post.join(",")}[v${k}]`);
   });
   parts.unshift(`[0:v]fps=${fps},split=${cuts.segments.length}${cuts.segments.map((_, k) => `[g${k}]`).join("")}`);
-  parts.push(`${cuts.segments.map((_, k) => `[v${k}]`).join("")}concat=n=${cuts.segments.length}:v=1:a=0[v]`);
+  parts.push(`${cuts.segments.map((_, k) => `[v${k}]`).join("")}concat=n=${cuts.segments.length}:v=1:a=0,${BT709}[v]`);
   ffmpeg(["-i", spine.file, "-filter_complex", parts.join(";"), "-map", "[v]", "-an",
     "-c:v", "libx264", "-preset", scale < 1 ? "veryfast" : "fast", "-crf", scale < 1 ? "23" : "17", "-pix_fmt", "yuv420p",
     "-colorspace", "bt709", "-color_primaries", "bt709", "-color_trc", "bt709", "-r", String(fps), out]);

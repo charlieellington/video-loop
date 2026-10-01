@@ -9,7 +9,7 @@ import { join } from "node:path";
 import { probeMedia, durationMs } from "./probe.mjs";
 import { measureLoudness } from "./loudness.mjs";
 import { ffmpeg, ensureDir, sec, Failure, Pending, log } from "./util.mjs";
-import { fitChain } from "./render-cut.mjs";
+import { fitChain, BT709 } from "./render-cut.mjs";
 
 const HOOK_FPS = 30;
 
@@ -89,7 +89,7 @@ export function assemblePicture({ coveredCut, tl, insertMedia, W, H, fps, out })
     cursor = x.at_cut_ms;
   });
   parts.push(`[c${tl.inserts.length}]trim=start_frame=${Math.round(cursor * fps / 1000)},setpts=PTS-STARTPTS[tail]`); seq.push("[tail]");
-  ffmpeg([...inputs, "-filter_complex", `${parts.join(";")};${seq.join("")}concat=n=${seq.length}:v=1:a=0,format=yuv420p[v]`, "-map", "[v]",
+  ffmpeg([...inputs, "-filter_complex", `${parts.join(";")};${seq.join("")}concat=n=${seq.length}:v=1:a=0,format=yuv420p,${BT709}[v]`, "-map", "[v]",
     "-c:v", "libx264", "-preset", W < 1000 ? "veryfast" : "fast", "-crf", W < 1000 ? "23" : "17", "-r", String(fps), out]);
   const got = durationMs(out); if (Math.abs(got - tl.total) > 150) throw new Failure(`assembled picture is ${got} ms, timeline says ${tl.total} ms`);
   return out;

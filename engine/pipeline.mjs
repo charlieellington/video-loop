@@ -8,7 +8,7 @@
 import { existsSync, copyFileSync } from "node:fs";
 import { join, basename } from "node:path";
 import { preparePlan, checkApproval } from "./plan.mjs";
-import { renderPicture, renderVoice, renderSize, tolerance } from "./render-cut.mjs";
+import { renderPicture, renderVoice, renderSize, tolerance, BT709 } from "./render-cut.mjs";
 import { assembleCovers, ambienceStem } from "./covers.mjs";
 import { renderInserts, assemblePicture } from "./inserts.mjs";
 import { spliceStem, mixSoundtrack } from "./mix.mjs";
@@ -55,7 +55,7 @@ export async function render(ctx, { master = false, keepTemp = false } = {}) {
   let captioned = finalPic;
   if (cfg.captions.preset !== "none") {
     captioned = join(tmp, "picture-captioned.mp4");
-    ffmpeg(["-i", basename(finalPic), "-vf", "ass=captions.ass:fontsdir=fonts", "-c:v", "libx264", "-preset", master ? "slow" : "veryfast", "-crf", master ? "17" : "23", "-pix_fmt", "yuv420p",
+    ffmpeg(["-i", basename(finalPic), "-vf", `ass=captions.ass:fontsdir=fonts,${BT709}`, "-c:v", "libx264", "-preset", master ? "slow" : "veryfast", "-crf", master ? "17" : "23", "-pix_fmt", "yuv420p",
       "-colorspace", "bt709", "-color_primaries", "bt709", "-color_trc", "bt709", basename(captioned)], { cwd: tmp });
     log(`CAPTIONS: ${caps.lines.length} phrase(s), ${caps.preset}${caps.events ? ` (${caps.events} events)` : ""} burned in · SRT sidecar ${cfg.captions.srt ? "written" : "off"}`);
   } else log("CAPTIONS: none burned");

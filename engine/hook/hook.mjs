@@ -6,13 +6,12 @@
 // Adapted from the away-loop lab's hook-typed/make-hook.mjs: no music bed of its own (the film's
 // music owns that), no fade to black, and paths come from the project.
 
-import { execFileSync } from "node:child_process";
 import { existsSync, readdirSync, rmSync, writeFileSync } from "node:fs";
 import { join, dirname, basename } from "node:path";
 import { fileURLToPath } from "node:url";
 import { homedir } from "node:os";
 import { ffmpeg, ensureDir, Failure, log } from "../util.mjs";
-import { durationMs } from "../probe.mjs";
+import { durationMs, probeMedia } from "../probe.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const TOOL = join(HERE, "..", "..");
@@ -66,7 +65,7 @@ export async function renderHook({ spec, paths, outDir, W, H }) {
   const sfx = join(TOOL, "assets", "sfx", "typing-keys.mp3"); const inputs = [], parts = [], mix = [];
   shots.forEach((s, i) => {
     const d = s.t1 - s.t0; inputs.push("-ss", String(s.srcIn), "-t", d.toFixed(3), "-i", s.srcResolved);
-    const hasA = execFileSync("ffprobe", ["-v", "error", "-select_streams", "a", "-show_entries", "stream=index", "-of", "csv=p=0", s.srcResolved]).toString().trim() !== "";
+    const hasA = probeMedia(s.srcResolved).has_audio;
     parts.push(hasA ? `[${i}:a]aresample=48000,aformat=channel_layouts=mono,apad=whole_dur=${d.toFixed(3)},atrim=end=${d.toFixed(3)},afade=t=in:d=0.15,afade=t=out:st=${(d - 0.15).toFixed(2)}:d=0.15[a${i}]` : `aevalsrc=0:s=48000:d=${d.toFixed(3)}[a${i}]`);
   });
   parts.push(`${shots.map((_, i) => `[a${i}]`).join("")}concat=n=${shots.length}:v=0:a=1,volume=0.32[amb]`); mix.push("[amb]");

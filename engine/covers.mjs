@@ -11,7 +11,7 @@ import { existsSync } from "node:fs";
 import { probeMedia, durationMs } from "./probe.mjs";
 import { measureLoudness } from "./loudness.mjs";
 import { ffmpeg, ffmpegStderr, sec, Failure, log } from "./util.mjs";
-import { fitChain, HDR_TONEMAP } from "./render-cut.mjs";
+import { fitChain, HDR_TONEMAP, BT709 } from "./render-cut.mjs";
 
 /** Resolve the effective sound choice of a cover. */
 export const coverSound = (c, cfg) => (c.sound && c.sound !== "default" ? c.sound : cfg.source_sound.broll_default);
@@ -59,7 +59,7 @@ export function assembleCovers({ base, out, windows, resolved, cfg, W, H, hasOwn
   windows.forEach((w, n) => { const nx = n === windows.length - 1 ? "vout" : `b${n}`; chains.push(`[${cur}][c${n}]overlay=0:0:enable='between(t,${sec(w.ws)},${sec(w.we)})':eof_action=repeat[${nx}]`); cur = nx; });
   if (!windows.length) { log("COVERS: none"); return { file: base, windows: [] }; }
   const baseMs = durationMs(base);
-  ffmpeg([...inputs, "-filter_complex", `${chains.join(";")};[vout]trim=duration=${sec(baseMs)},format=yuv420p[v]`, "-map", "[v]", "-an",
+  ffmpeg([...inputs, "-filter_complex", `${chains.join(";")};[vout]trim=duration=${sec(baseMs)},format=yuv420p,${BT709}[v]`, "-map", "[v]", "-an",
     "-c:v", "libx264", "-preset", W < 1000 ? "veryfast" : "fast", "-crf", W < 1000 ? "23" : "17", "-colorspace", "bt709", "-color_primaries", "bt709", "-color_trc", "bt709", out]);
   const din = baseMs, dout = durationMs(out);
   if (Math.abs(dout - din) > 100) throw new Failure(`covers changed the picture length (${din} → ${dout} ms)`);
