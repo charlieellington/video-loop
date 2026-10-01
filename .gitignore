@@ -13,3 +13,4 @@ verification/
 # The fictional example keeps its inputs tracked, never its state or renders
 examples/*/.video-loop/
 examples/*/output/
+tests/.tmp-*

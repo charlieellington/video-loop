@@ -24,7 +24,7 @@ source = "none"             # none | elevenlabs — removes background noise fro
 
 [transcription]
 source = "elevenlabs"       # elevenlabs | import
-model = "scribe_v1"
+model = "scribe_v2"
 language = "auto"           # auto | en | nl | …
 
 [captions]

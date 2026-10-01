@@ -63,6 +63,7 @@ export async function request({ key, path, form, json, query, timeoutMs = 180000
   let body;
   if (form) body = form;
   else if (json) { headers["content-type"] = "application/json"; body = JSON.stringify(json); }
+  timeoutMs = Number(process.env.VIDEO_LOOP_TIMEOUT_MS) || timeoutMs;   // tests shorten it
   const ctl = new AbortController(); const timer = setTimeout(() => ctl.abort(), timeoutMs);
   let res;
   try {
@@ -81,7 +82,7 @@ export async function request({ key, path, form, json, query, timeoutMs = 180000
   clearTimeout(timer);
   const contentType = res.headers.get("content-type") ?? "";
   const ids = {};
-  for (const [k, v] of res.headers) if (/(request|history|song|generation)[-_]?id/i.test(k)) ids[k] = v;
+  for (const [k, v] of res.headers) if (/(^|-)id$|request|history|song|generation|transcription/i.test(k)) ids[k] = v;
   if (!res.ok) throw new Failure(describeHttpError(what, res.status, bytes, contentType));
   return { status: res.status, headers: res.headers, bytes, contentType, ids };
 }
@@ -91,7 +92,9 @@ function describeHttpError(what, status, bytes, contentType) {
   if (/json/.test(contentType)) {
     try { const j = JSON.parse(bytes.toString("utf8")); detail = j.detail?.message ?? j.detail?.status ?? (typeof j.detail === "string" ? j.detail : JSON.stringify(j.detail ?? j)).slice(0, 300); } catch {}
   } else detail = bytes.toString("utf8").slice(0, 200);
-  const hint = status === 401 ? "the API key was rejected — check ELEVENLABS_API_KEY"
+  const perm = detail.match(/missing the permission (\w+)/i)?.[1];
+  const hint = perm ? `this API key is valid but lacks the "${perm}" permission — enable it for the key in ElevenLabs (Developers → API keys), or use a key that has it`
+    : status === 401 ? "the API key was rejected — check ELEVENLABS_API_KEY"
     : status === 403 ? "this account or key does not have access to this feature (plan or key permissions)"
     : status === 402 ? "the account is out of credits or this feature needs a paid plan"
     : status === 429 ? "rate limited or too many concurrent requests — wait a minute and run the command again"

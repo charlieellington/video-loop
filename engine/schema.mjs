@@ -40,7 +40,7 @@ export const SCHEMA = {
   },
   transcription: {
     source: e(["elevenlabs", "import"], "elevenlabs"),
-    model: s("scribe_v1"),
+    model: s("scribe_v2"),
     language: s("auto"),
     transcript: s(""),
   },
