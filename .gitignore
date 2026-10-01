@@ -1,0 +1,15 @@
+# Secrets — never commit
+.env
+.env.*
+!.env.example
+# Dependencies
+node_modules/
+# Per-project state, caches and renders (user projects can live anywhere; these guard the repo)
+.video-loop/
+output/
+verification/
+*.log
+.DS_Store
+# The fictional example keeps its inputs tracked, never its state or renders
+examples/*/.video-loop/
+examples/*/output/

@@ -1,0 +1,464 @@
+{
+ "contract": "video-loop/words@1",
+ "audio_sha256": "ae2187bce2e0e16cce6fa0e7ca09b42ee78aa262c7950b3f34ee8b876a55849d",
+ "language": "eng",
+ "source": "ElevenLabs Scribe (scribe_v2), live run 2026-10-01, transcription_id 40AOD9fO0dq9nLSMTXdZ; timings checked against the generated sentence windows (tests/fixtures/speech-windows.json)",
+ "words": [
+  {
+   "i": 0,
+   "text": "This",
+   "start_ms": 400,
+   "end_ms": 540
+  },
+  {
+   "i": 1,
+   "text": "is",
+   "start_ms": 600,
+   "end_ms": 720
+  },
+  {
+   "i": 2,
+   "text": "the",
+   "start_ms": 760,
+   "end_ms": 880
+  },
+  {
+   "i": 3,
+   "text": "story",
+   "start_ms": 940,
+   "end_ms": 1240
+  },
+  {
+   "i": 4,
+   "text": "of",
+   "start_ms": 1280,
+   "end_ms": 1400
+  },
+  {
+   "i": 5,
+   "text": "how",
+   "start_ms": 1460,
+   "end_ms": 1660
+  },
+  {
+   "i": 6,
+   "text": "we",
+   "start_ms": 1700,
+   "end_ms": 1840
+  },
+  {
+   "i": 7,
+   "text": "made",
+   "start_ms": 1880,
+   "end_ms": 2100
+  },
+  {
+   "i": 8,
+   "text": "a",
+   "start_ms": 2160,
+   "end_ms": 2220
+  },
+  {
+   "i": 9,
+   "text": "book",
+   "start_ms": 2260,
+   "end_ms": 2460
+  },
+  {
+   "i": 10,
+   "text": "for",
+   "start_ms": 2560,
+   "end_ms": 2700
+  },
+  {
+   "i": 11,
+   "text": "Pip.",
+   "start_ms": 2780,
+   "end_ms": 3040
+  },
+  {
+   "i": 12,
+   "text": "Pip",
+   "start_ms": 3540,
+   "end_ms": 3720
+  },
+  {
+   "i": 13,
+   "text": "is",
+   "start_ms": 3780,
+   "end_ms": 3860
+  },
+  {
+   "i": 14,
+   "text": "a",
+   "start_ms": 3920,
+   "end_ms": 3980
+  },
+  {
+   "i": 15,
+   "text": "small",
+   "start_ms": 4019,
+   "end_ms": 4320
+  },
+  {
+   "i": 16,
+   "text": "fox",
+   "start_ms": 4420,
+   "end_ms": 4740
+  },
+  {
+   "i": 17,
+   "text": "who",
+   "start_ms": 4980,
+   "end_ms": 5160
+  },
+  {
+   "i": 18,
+   "text": "collects",
+   "start_ms": 5200,
+   "end_ms": 5700
+  },
+  {
+   "i": 19,
+   "text": "moons.",
+   "start_ms": 5780,
+   "end_ms": 6240
+  },
+  {
+   "i": 20,
+   "text": "Every",
+   "start_ms": 6760,
+   "end_ms": 7020
+  },
+  {
+   "i": 21,
+   "text": "night",
+   "start_ms": 7100,
+   "end_ms": 7320
+  },
+  {
+   "i": 22,
+   "text": "she",
+   "start_ms": 7420,
+   "end_ms": 7600
+  },
+  {
+   "i": 23,
+   "text": "climbs",
+   "start_ms": 7640,
+   "end_ms": 8100
+  },
+  {
+   "i": 24,
+   "text": "the",
+   "start_ms": 8160,
+   "end_ms": 8280
+  },
+  {
+   "i": 25,
+   "text": "hill",
+   "start_ms": 8320,
+   "end_ms": 8520
+  },
+  {
+   "i": 26,
+   "text": "behind",
+   "start_ms": 8580,
+   "end_ms": 9060
+  },
+  {
+   "i": 27,
+   "text": "the",
+   "start_ms": 9080,
+   "end_ms": 9240
+  },
+  {
+   "i": 28,
+   "text": "bakery",
+   "start_ms": 9280,
+   "end_ms": 9800
+  },
+  {
+   "i": 29,
+   "text": "and",
+   "start_ms": 10020,
+   "end_ms": 10220
+  },
+  {
+   "i": 30,
+   "text": "catches",
+   "start_ms": 10320,
+   "end_ms": 10760
+  },
+  {
+   "i": 31,
+   "text": "one",
+   "start_ms": 10820,
+   "end_ms": 10940
+  },
+  {
+   "i": 32,
+   "text": "in",
+   "start_ms": 10980,
+   "end_ms": 11040
+  },
+  {
+   "i": 33,
+   "text": "a",
+   "start_ms": 11080,
+   "end_ms": 11140
+  },
+  {
+   "i": 34,
+   "text": "jam",
+   "start_ms": 11180,
+   "end_ms": 11420
+  },
+  {
+   "i": 35,
+   "text": "jar.",
+   "start_ms": 11540,
+   "end_ms": 11840
+  },
+  {
+   "i": 36,
+   "text": "We",
+   "start_ms": 12360,
+   "end_ms": 12480
+  },
+  {
+   "i": 37,
+   "text": "drew",
+   "start_ms": 12500,
+   "end_ms": 12720
+  },
+  {
+   "i": 38,
+   "text": "her",
+   "start_ms": 12760,
+   "end_ms": 12920
+  },
+  {
+   "i": 39,
+   "text": "first",
+   "start_ms": 12960,
+   "end_ms": 13280
+  },
+  {
+   "i": 40,
+   "text": "on",
+   "start_ms": 13340,
+   "end_ms": 13440
+  },
+  {
+   "i": 41,
+   "text": "paper,",
+   "start_ms": 13540,
+   "end_ms": 13940
+  },
+  {
+   "i": 42,
+   "text": "then",
+   "start_ms": 14220,
+   "end_ms": 14380
+  },
+  {
+   "i": 43,
+   "text": "on",
+   "start_ms": 14400,
+   "end_ms": 14500
+  },
+  {
+   "i": 44,
+   "text": "the",
+   "start_ms": 14540,
+   "end_ms": 14620
+  },
+  {
+   "i": 45,
+   "text": "laptop,",
+   "start_ms": 14680,
+   "end_ms": 15200
+  },
+  {
+   "i": 46,
+   "text": "page",
+   "start_ms": 15540,
+   "end_ms": 15840
+  },
+  {
+   "i": 47,
+   "text": "by",
+   "start_ms": 15900,
+   "end_ms": 16079
+  },
+  {
+   "i": 48,
+   "text": "page.",
+   "start_ms": 16120,
+   "end_ms": 16520
+  },
+  {
+   "i": 49,
+   "text": "Here",
+   "start_ms": 17040,
+   "end_ms": 17220
+  },
+  {
+   "i": 50,
+   "text": "is",
+   "start_ms": 17280,
+   "end_ms": 17400
+  },
+  {
+   "i": 51,
+   "text": "the",
+   "start_ms": 17460,
+   "end_ms": 17560
+  },
+  {
+   "i": 52,
+   "text": "cover.",
+   "start_ms": 17620,
+   "end_ms": 17980
+  },
+  {
+   "i": 53,
+   "text": "Here",
+   "start_ms": 18440,
+   "end_ms": 18620
+  },
+  {
+   "i": 54,
+   "text": "she",
+   "start_ms": 18700,
+   "end_ms": 18820
+  },
+  {
+   "i": 55,
+   "text": "is",
+   "start_ms": 18880,
+   "end_ms": 18960
+  },
+  {
+   "i": 56,
+   "text": "on",
+   "start_ms": 19000,
+   "end_ms": 19100
+  },
+  {
+   "i": 57,
+   "text": "the",
+   "start_ms": 19160,
+   "end_ms": 19220
+  },
+  {
+   "i": 58,
+   "text": "hill.",
+   "start_ms": 19280,
+   "end_ms": 19580
+  },
+  {
+   "i": 59,
+   "text": "And",
+   "start_ms": 20080,
+   "end_ms": 20220
+  },
+  {
+   "i": 60,
+   "text": "on",
+   "start_ms": 20260,
+   "end_ms": 20360
+  },
+  {
+   "i": 61,
+   "text": "the",
+   "start_ms": 20420,
+   "end_ms": 20480
+  },
+  {
+   "i": 62,
+   "text": "last",
+   "start_ms": 20540,
+   "end_ms": 20800
+  },
+  {
+   "i": 63,
+   "text": "page,",
+   "start_ms": 20900,
+   "end_ms": 21280
+  },
+  {
+   "i": 64,
+   "text": "she",
+   "start_ms": 21580,
+   "end_ms": 21740
+  },
+  {
+   "i": 65,
+   "text": "lets",
+   "start_ms": 21800,
+   "end_ms": 22080
+  },
+  {
+   "i": 66,
+   "text": "every",
+   "start_ms": 22160,
+   "end_ms": 22400
+  },
+  {
+   "i": 67,
+   "text": "moon",
+   "start_ms": 22500,
+   "end_ms": 22700
+  },
+  {
+   "i": 68,
+   "text": "go.",
+   "start_ms": 22820,
+   "end_ms": 23100
+  },
+  {
+   "i": 69,
+   "text": "Whose",
+   "start_ms": 23620,
+   "end_ms": 23840
+  },
+  {
+   "i": 70,
+   "text": "story",
+   "start_ms": 23940,
+   "end_ms": 24240
+  },
+  {
+   "i": 71,
+   "text": "would",
+   "start_ms": 24320,
+   "end_ms": 24460
+  },
+  {
+   "i": 72,
+   "text": "you",
+   "start_ms": 24520,
+   "end_ms": 24620
+  },
+  {
+   "i": 73,
+   "text": "like",
+   "start_ms": 24660,
+   "end_ms": 24960
+  },
+  {
+   "i": 74,
+   "text": "to",
+   "start_ms": 25000,
+   "end_ms": 25140
+  },
+  {
+   "i": 75,
+   "text": "keep?",
+   "start_ms": 25200,
+   "end_ms": 25460
+  }
+ ]
+}

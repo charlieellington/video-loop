@@ -1,0 +1,103 @@
+{
+ "contract": "video-loop/edit@1",
+ "transcript_sha256": "efdf52c81e5c8a893ca944a7c61df1d8d3d2b333faeedbd96258d7c5ba33bedf",
+ "notes": "Open on the book itself, then Pip's world, then the making, then the pages. One cut: 'then on the laptop' repeats what the sketching clip already shows. Closes on the question to the viewer over the moon.",
+ "segments": [
+  {
+   "first_word_i": 0,
+   "last_word_i": 41,
+   "reason": "intro, Pip, the hill, drawing on paper"
+  },
+  {
+   "first_word_i": 46,
+   "last_word_i": 75,
+   "reason": "page by page, the pages, closing question"
+  }
+ ],
+ "covers": [
+  {
+   "over_words": [
+    0,
+    11
+   ],
+   "media": "media/book pages/página 1 – cover.png",
+   "why": "open on the finished book"
+  },
+  {
+   "over_words": [
+    12,
+    19
+   ],
+   "media": "media/clips/hill at night.mp4",
+   "start_s": 0,
+   "why": "Pip's world: night sky and a moon",
+   "hold_until_next": true
+  },
+  {
+   "over_words": [
+    20,
+    28
+   ],
+   "media": "media/clips/bakery (stored sideways, silent).mp4",
+   "why": "the bakery at the foot of the hill"
+  },
+  {
+   "over_words": [
+    29,
+    35
+   ],
+   "media": "media/clips/jam jar (landscape, no sound).mp4",
+   "why": "the moon in the jam jar (landscape clip, blurred fill)",
+   "hold_until_next": true
+  },
+  {
+   "over_words": [
+    36,
+    48
+   ],
+   "media": "media/clips/sketching.mp4",
+   "sound": "keep",
+   "sound_gain_db": -16,
+   "why": "the drawing itself; keep its soft sound low under the voice",
+   "hold_until_next": true
+  },
+  {
+   "over_words": [
+    49,
+    52
+   ],
+   "media": "media/book pages/página 1 – cover.png",
+   "why": "here is the cover"
+  },
+  {
+   "over_words": [
+    53,
+    58
+   ],
+   "media": "media/book pages/página 2 – the hill.png",
+   "why": "page two: the hill"
+  },
+  {
+   "over_words": [
+    59,
+    68
+   ],
+   "media": "media/book pages/página 3 – één maan.png",
+   "why": "the last page",
+   "hold_until_next": true
+  },
+  {
+   "over_words": [
+    69,
+    75
+   ],
+   "media": "media/clips/hill at night.mp4",
+   "start_s": 2.5,
+   "why": "the question to the viewer over the moon",
+   "hold_until_next": true
+  }
+ ],
+ "caption_fixes": {
+  "28": "bakery,"
+ }
+}

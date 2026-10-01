@@ -1,0 +1,46 @@
+# Bene's format — a STARTING POINT, not a rulebook. Style preferences only: no recordings, voices,
+# accounts or paths. A voice-over-led story: her recorded narration carries it, b-roll and photos
+# cover every second, hard cuts about every 2.5 s, natural colour, burned captions, no hook.
+# Her caption look, music, platform and ending are chosen in her conversation with her agent.
+[about]
+summary = "Recorded voice-over with pictures throughout; outlined phrase captions; continuous ducked music bed when a music source is chosen."
+
+[narration]
+kind = "recorded-audio"
+
+[transcription]
+language = "auto"         # Dutch and English both tested
+
+[editorial]
+shot_target_s = 2.5       # guidance for the agent, not forced uniform cuts
+face_policy = "none"      # no face shots required
+full_cover = true         # a picture over every moment, including pauses and the tail
+punch_in = false
+
+[presentation]
+hook = "none"
+interludes = false
+grade = "natural"
+touchup = false
+
+[captions]
+preset = "outline-phrase" # the word-highlight alternative is "typewriter-highlight" — shown at intake
+position = "lower"
+
+[music]
+source = "none"           # the project picks "file" or "elevenlabs" with a brief; a profile never buys music
+placement = "through"     # continuous instrumental bed …
+level_db = -18            # … well under the voice …
+ducking = true            # … dipping further while she speaks
+fade_in_s = 1.0
+fade_out_s = 2.5
+
+[source_sound]
+broll_default = "mute"    # b-roll sound off unless a shot keeps it deliberately
+broll_gain_db = -14
+
+[voice_synthesis]
+enabled = false
+
+[export]
+small_variant = false

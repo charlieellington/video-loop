@@ -1,0 +1,38 @@
+# Charlie's format — talking-head takes cut by word, b-roll covers, warm grade, optional punch-ins,
+# a typed hook and music only at "moments" (under the hook and the interludes). Style preferences
+# only: no recordings, voices, accounts or paths. Cleanup and music source are project choices.
+[about]
+summary = "Recorded talking-head video; cream/ink mono captions; warm grade; alternating punch-ins; music moments."
+
+[narration]
+kind = "recorded-video"
+
+[editorial]
+shot_target_s = 4
+face_policy = "preferred"
+full_cover = false
+punch_in = true
+
+[presentation]
+hook = "none"             # set "typed" per video (needs a hook block in the edit plan + Chromium)
+interludes = true
+grade = "warm"
+touchup = false
+
+[captions]
+preset = "mono-box"
+position = "lower"
+
+[music]
+placement = "moments"
+level_db = -1             # music moments sit just under the voice level (the lab's "B" level)
+ducking = true
+duck_ratio = 2
+attack_ms = 40
+release_ms = 650
+
+[source_sound]
+broll_default = "mute"
+
+[export]
+small_variant = true      # 720-wide copy for messaging apps

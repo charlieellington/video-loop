@@ -1,0 +1,20 @@
+{
+  "name": "video-loop",
+  "version": "0.1.0",
+  "description": "Make and revise short narrated videos on your own computer with your coding agent: word-timed edits, b-roll covers, captions, music and a local review loop.",
+  "license": "MIT",
+  "type": "module",
+  "bin": { "video-loop": "bin/video-loop.mjs" },
+  "engines": { "node": ">=20.19 <25" },
+  "scripts": {
+    "test": "node --test tests/",
+    "doctor": "node bin/video-loop.mjs doctor",
+    "example": "node bin/video-loop.mjs example"
+  },
+  "dependencies": {
+    "smol-toml": "1.9.0"
+  },
+  "optionalDependencies": {
+    "playwright-core": "1.63.0"
+  }
+}

@@ -1,0 +1,57 @@
+{
+ "note": "sentence windows of the generated narration (seconds) — the timing truth transcripts are checked against",
+ "en": [
+  {
+   "text": "This is the story of how we made a book for Pip.",
+   "start_s": 0.35,
+   "end_s": 3.076
+  },
+  {
+   "text": "Pip is a small fox who collects moons.",
+   "start_s": 3.526,
+   "end_s": 6.254
+  },
+  {
+   "text": "Every night she climbs the hill behind the bakery, and catches one in a jam jar.",
+   "start_s": 6.704,
+   "end_s": 11.853
+  },
+  {
+   "text": "We drew her first on paper, then on the laptop, page by page.",
+   "start_s": 12.303,
+   "end_s": 16.539
+  },
+  {
+   "text": "Here is the cover. Here she is on the hill.",
+   "start_s": 16.989,
+   "end_s": 19.589
+  },
+  {
+   "text": "And on the last page, she lets every moon go.",
+   "start_s": 20.039,
+   "end_s": 23.11
+  },
+  {
+   "text": "Whose story would you like to keep?",
+   "start_s": 23.56,
+   "end_s": 25.529
+  }
+ ],
+ "nl": [
+  {
+   "text": "Dit boek is voor Pip, de vos die manen verzamelt.",
+   "start_s": 0.35,
+   "end_s": 3.762
+  },
+  {
+   "text": "Ze las het één keer, en toen nog een keer, in het café.",
+   "start_s": 4.212,
+   "end_s": 8.523
+  },
+  {
+   "text": "Wiens verhaal wil jij bewaren?",
+   "start_s": 8.973,
+   "end_s": 11.018
+  }
+ ]
+}

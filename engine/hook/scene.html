@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<!-- scene.html — the typed-text hook scene (from the away-loop lab's hook-typed/scene.html).
+     GENERIC: every per-video value (shots, lines, timings) arrives as window.HOOK, injected by
+     engine/hook/hook.mjs from the edit plan's "hook" block. ONE typeface: Geist Mono Black (OFL),
+     bundled in assets/fonts.
+     Size and line breaks are COMPUTED by fitLine(), never hand-set: any hook copy auto-sizes
+     to the same fill-frame visual weight. Deterministic — make-hook.mjs calls seekTo(t) per
+     output frame; nothing plays in real time, so word timing is exact. -->
+<html><head><meta charset="utf-8"><style>
+  @font-face { font-family: "GeistMono"; src: url("../../assets/fonts/GeistMono-Black.ttf") format("truetype");
+               font-weight: 900; }
+  html, body { margin: 0; width: 1080px; height: 1920px; overflow: hidden; background: #000; }
+  .shot { position: absolute; inset: 0; display: none; }
+  .shot.active { display: block; }
+  .shot video { width: 1080px; height: 1920px; object-fit: cover; }
+  #textbox { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+    width: 1080px; text-align: center; z-index: 10; opacity: 0.92; color: #FFF8F3;
+    font-family: "GeistMono", ui-monospace, Menlo, monospace;
+    font-weight: 900; letter-spacing: -0.02em;
+    text-shadow: 0 4px 34px rgba(0,0,0,0.45), 0 0 3px rgba(0,0,0,0.25); }
+  #line .row { display: block; white-space: nowrap; }
+  #line span { opacity: 0; display: inline-block; }
+  #fade { position: absolute; inset: 0; background: #000; opacity: 0; z-index: 20; }
+  #meas { position: absolute; visibility: hidden; white-space: nowrap; font-size: 100px;
+          font-family: "GeistMono", ui-monospace, monospace; font-weight: 900;
+          letter-spacing: -0.02em; }
+</style></head><body>
+  <div id="shots"></div>
+  <div id="textbox"><div id="line"></div></div>
+  <div id="fade"></div><div id="meas"></div>
+<script>
+const H = window.HOOK;                                   // injected by make-hook.mjs
+const SHOTS = H.shots, LINES = H.lines, DUR = H.duration_s;
+// FILL-FRAME FIT — the heart of the template. 95% of frame width, one scale across beats.
+const W_LIMIT = 1030, H_LIMIT = 1230, LH = 1.12, MAX_PT = H.max_pt || 200;
+const meas = document.getElementById("meas");
+const widthAt100 = (s) => { meas.textContent = s; return meas.getBoundingClientRect().width; };
+function partitions(words, rows) {
+  const out = [];
+  const walk = (start, left, acc) => {
+    if (left === 1) { out.push([...acc, words.slice(start)]); return; }
+    for (let end = start + 1; end <= words.length - (left - 1); end++)
+      walk(end, left - 1, [...acc, words.slice(start, end)]);
+  };
+  walk(0, rows, []); return out;
+}
+function fitLine(text) {                                  // biggest type, no orphan rows
+  const words = text.split(" ");
+  let best = null;
+  for (let r = 1; r <= Math.min(4, words.length); r++)
+    for (const rows of partitions(words, r)) {
+      const ws = rows.map(w => widthAt100(w.join(" ")));
+      const widest = Math.max(...ws);
+      if (r > 1 && Math.min(...ws) / widest < 0.45) continue;      // orphan guard
+      const size = Math.min((W_LIMIT / widest) * 100, H_LIMIT / (r * LH), MAX_PT);
+      if (!best || size > best.size) best = { size, rows };
+    }
+  return best;
+}
+const shotsEl = document.getElementById("shots"), lineEl = document.getElementById("line");
+const fadeEl = document.getElementById("fade"), vids = [];
+SHOTS.forEach((s, i) => {
+  const d = document.createElement("div"); d.className = "shot"; d.id = "shot" + i;
+  const v = document.createElement("video");
+  v.muted = true; v.preload = "auto"; v.src = s.src;      // absolute file:// URL from make-hook
+  d.appendChild(v); shotsEl.appendChild(d); vids.push(v);
+});
+const clamp = x => Math.max(0, Math.min(1, x));
+function seekVideo(v, time) {
+  return new Promise(res => {
+    if (Math.abs(v.currentTime - time) < 0.001 && v.readyState >= 2) return res();
+    const h = () => { v.removeEventListener("seeked", h); res(); };
+    v.addEventListener("seeked", h); v.currentTime = time;
+  });
+}
+window.seekTo = async (t) => {
+  let idx = SHOTS.findIndex(s => t >= s.t0 && t < s.t1);
+  if (idx < 0) idx = SHOTS.length - 1;
+  SHOTS.forEach((s, i) => document.getElementById("shot" + i).classList.toggle("active", i === idx));
+  await seekVideo(vids[idx], SHOTS[idx].in_s + (t - SHOTS[idx].t0));
+
+  const line = LINES.find(l => t >= l.start - 0.05 && t < l.end);
+  lineEl.innerHTML = "";
+  if (line) {
+    const gf = (line.fade_at && t > line.fade_at)
+      ? clamp((line.end - t) / (line.end - line.fade_at)) : 1;
+    lineEl.style.fontSize = line.fit.size.toFixed(1) + "px";
+    lineEl.style.lineHeight = LH;
+    let i = 0;
+    for (const row of line.fit.rows) {
+      const rowEl = document.createElement("div"); rowEl.className = "row";
+      row.forEach((w, j) => {
+        const op = clamp((t - (line.start + i * line.step)) / 0.12) * gf; i++;
+        const sp = document.createElement("span");
+        sp.textContent = w + (j < row.length - 1 ? " " : "");   // NBSP: inline-block eats plain spaces
+        sp.style.opacity = op;
+        sp.style.transform = `translateY(${(1 - op) * 10}px)`;
+        rowEl.appendChild(sp);
+      });
+      lineEl.appendChild(rowEl);
+    }
+  }
+  // fade_out is OFF unless hook.json says true: in a film the take follows straight on and a
+  // fade-to-black then smash-cut to the face read as a 'black stop' (video 2, 2 Sep).
+  fadeEl.style.opacity = H.fade_out === true ? clamp((t - (DUR - 0.5)) / 0.5) : 0;
+  return true;
+};
+Promise.all([
+  document.fonts.load('900 100px GeistMono').then(() => document.fonts.ready),
+  ...vids.map(v => new Promise(res => {
+    if (v.readyState >= 2) return res();
+    v.addEventListener("loadeddata", res, { once: true });
+    v.addEventListener("error", () => { window.videoError = v.src; res(); }, { once: true });
+  })),
+]).then(() => {
+  for (const l of LINES) l.fit = fitLine(l.text);        // measure with the real font loaded
+  window.fits = LINES.map(l => ({ text: l.text, size: Math.round(l.fit.size),
+                                  rows: l.fit.rows.map(r => r.join(" ")) }));
+  window.dims = vids.map(v => v.videoWidth + "x" + v.videoHeight);
+  window.ready = true;
+});
+</script></body></html>

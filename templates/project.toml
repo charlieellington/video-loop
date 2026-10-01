@@ -1,0 +1,38 @@
+# project.toml — one video. Paths are relative to THIS folder. No secrets here: the ElevenLabs key
+# goes in ELEVENLABS_API_KEY (shell) or a .env file next to this one. Every setting is described in
+# docs/configuration.md in the video-loop repository; anything not set comes from the profile.
+schema_version = 1
+
+[project]
+title = "My video"
+profile = "bene"            # bene | charlie — a starting style; override anything below
+media_dir = "media"         # your b-roll, photos and recordings (never modified)
+output_dir = "output"
+
+[canvas]
+width = 1080
+height = 1920
+fps = 30
+fit = "blur"                # how off-shape pictures fill the frame: blur | crop | contain
+
+[narration]
+kind = "recorded-audio"     # recorded-audio (.m4a/.wav/.mp3/…) | recorded-video (talking head)
+source = "media/narration.m4a"
+
+[voice_cleanup]
+source = "none"             # none | elevenlabs — removes background noise from the narration only
+
+[transcription]
+source = "elevenlabs"       # elevenlabs | import
+model = "scribe_v1"
+language = "auto"           # auto | en | nl | …
+
+[captions]
+preset = "outline-phrase"   # none | outline-phrase | typewriter-highlight | mono-box
+position = "lower"          # lower | center | upper
+
+[music]
+source = "none"             # none | file | elevenlabs
+# file = "media/music.mp3"
+# prompt = "warm, gentle acoustic guitar and soft piano, unhurried, instrumental"
+level_db = -18              # how far under the voice the music sits (dB)

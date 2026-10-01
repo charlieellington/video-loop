@@ -1,0 +1,30 @@
+# The fictional example: making a book for Pip, an imaginary fox who collects moons.
+# Everything here is synthetic and invented (see MEDIA-NOTICE.md). It renders WITHOUT an API key:
+# the word-timed transcript is bundled (transcription.source = "import") and the music is a local
+# demo bed (music.source = "file"). Voice cleanup is off.
+schema_version = 1
+
+[project]
+title = "Pip and the Paper Moon"
+profile = "bene"
+
+[narration]
+kind = "recorded-audio"
+source = "media/narration.m4a"
+
+[voice_cleanup]
+source = "none"
+
+[transcription]
+source = "import"
+transcript = "plan/transcript.json"
+
+[captions]
+preset = "typewriter-highlight"
+position = "lower"
+
+[music]
+source = "file"
+file = "media/demo-music-bed.m4a"
+placement = "through"
+level_db = -18
