@@ -86,7 +86,7 @@ export async function render(ctx, { master = false, keepTemp = false } = {}) {
   writeJson(master ? plan.rev.masterManifest : plan.rev.previewManifest, manifest);
   writeJson(join(outDir, `${kind}-manifest.json`), manifest);
   const d = boardData(ctx, plan, outDir);
-  writeAtomic(join(outDir, "review.html"), reviewHtml(d, { preview: { src: `${kind}.mp4`, name: `${plan.rev.id}/${kind}.mp4`, features: features.join(" · ") }, approved: true }));
+  writeAtomic(join(outDir, "review.html"), reviewHtml(d, { preview: { kind, src: `${kind}.mp4`, name: `${plan.rev.id}/${kind}.mp4`, features: features.join(" · ") }, approved: true }));
   if (!keepTemp) rmrf(tmp);
   for (const w of ev.warnings) log(`  WARN  ${w}`);
   if (ev.problems.length) throw new Failure(`${kind} rendered but failed its checks:\n  - ${ev.problems.join("\n  - ")}`, [`see ${join(outDir, `${kind}-manifest.json`)}`]);

@@ -14,7 +14,7 @@ ${c.img ? `<div style="position:relative"><img class="thumb" loading="lazy" src=
 ${c.note ? `<p class="note"><b>Why:</b> ${esc(c.note)}</p>` : ""}${c.sound ? `<p class="note">Sound: ${esc(c.sound)}</p>` : ""}</div>`;
 
 export function reviewHtml(d, { preview = null, approved = false } = {}) {
-  const state = preview ? `<span class="pill rendered">rendered preview</span>` : `<span class="pill proposed">proposed — not rendered yet</span>`;
+  const state = preview ? `<span class="pill rendered">rendered ${esc(preview.kind ?? "preview")}</span>` : `<span class="pill proposed">proposed — not rendered yet</span>`;
   const head = `<h1>${esc(d.title)}</h1><p class="muted">Revision <b>${esc(d.revision)}</b> · profile ${esc(d.profile || "none")} · ${esc(d.canvas)} · ${tc(d.total_ms)} long · ${state} ${approved ? `<span class="pill rendered">approved</span>` : `<span class="pill proposed">not approved</span>`}</p>`;
   const problems = d.problems.length ? `<div class="card" style="border-color:var(--bad)"><b style="color:var(--bad)">Must fix before approval</b><ul>${d.problems.map((p) => `<li>${esc(p)}</li>`).join("")}</ul></div>` : "";
   const player = preview ? `<h2>Preview</h2><div class="card"><video id="pv" controls playsinline preload="metadata" style="max-height:70vh;max-width:100%;background:#000" src="${preview.src}"></video>
