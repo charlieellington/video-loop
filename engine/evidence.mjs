@@ -4,6 +4,7 @@
 // would mean a moment with no picture slipped through) and for black holds, and saves still
 // frames at caption moments and shot changes so a person can look. It never claims more than it
 // measured: listening for clarity, pumping or clipped words is still a human pass.
+// Checks adapted from the away-loop lab's glitch-check.mjs (black stops) and laneA/evidence.mjs (join frames).
 
 import { join } from "node:path";
 import { probeMedia, durationMs } from "./probe.mjs";

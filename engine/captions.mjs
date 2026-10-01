@@ -8,6 +8,7 @@
 // For the highlight look every state of a phrase uses the SAME text (only colours change), so
 // libass lays it out once and nothing jumps as words appear. Corrections ("caption_fixes") change
 // what is displayed only — never which words are cut. The .srt carries plain phrases.
+// Adapted from the away-loop lab's make-captions.mjs (phrase grouping, caption-only fixes, the cream/ink style).
 
 import { writeFileSync } from "node:fs";
 
