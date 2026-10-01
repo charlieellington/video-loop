@@ -30,7 +30,7 @@ function checkNarrationFile(f) {
 /** Glue several talking-head takes into one reel with short black, silent gaps (from make-reel.sh). */
 function buildReel(ctx, takes) {
   const { cfg, sp } = ctx; const gap = cfg.narration.take_gap_s;
-  const key = sha256(takes.map((t) => t.sha).join(",") + `|${cfg.canvas.width}x${cfg.canvas.height}@${cfg.canvas.fps}|${gap}`).slice(0, 16);
+  const key = sha256(takes.map((t) => t.sha).join(",") + `|${cfg.canvas.width}x${cfg.canvas.height}@${cfg.canvas.fps}|${gap}|v2`).slice(0, 16);
   const out = join(ensureDir(sp.cache), `reel-${key}.mkv`), meta = join(sp.cache, `reel-${key}.json`);
   if (existsSync(out) && existsSync(meta)) return { file: out, reel: readJsonOpt(meta) };
   const { width: W, height: H, fps } = cfg.canvas;
@@ -45,13 +45,15 @@ function buildReel(ctx, takes) {
     }
     const n = nIn++;
     ins.push("-i", t.file);
-    parts.push(`[${n}:v]scale=${W}:${H}:force_original_aspect_ratio=increase,crop=${W}:${H},fps=${fps},format=yuv420p,setsar=1[v${k}];[${n}:a]aresample=48000,aformat=channel_layouts=mono[a${k}]`);
+    // each take's sound is cut to exactly its picture's whole-frame length, so takes stay in sync after joining
+    const frames = Math.round(t.m.duration_s * fps); t.frames = frames; const d = (frames / fps).toFixed(6);
+    parts.push(`[${n}:v]scale=${W}:${H}:force_original_aspect_ratio=increase,crop=${W}:${H},fps=${fps},tpad=stop_mode=clone:stop_duration=1,trim=end_frame=${frames},format=yuv420p,setsar=1[v${k}];[${n}:a]aresample=48000,aformat=channel_layouts=mono,apad,atrim=end=${d}[a${k}]`);
     seq.push(`[v${k}][a${k}]`);
   });
   const graph = `${parts.join(";")};${seq.join("")}concat=n=${seq.length}:v=1:a=1[v][a]`;
   ffmpeg([...ins, "-filter_complex", graph, "-map", "[v]", "-map", "[a]", "-c:v", "libx264", "-preset", "fast", "-crf", "16", "-c:a", "pcm_s16le", out]);
   let t = 0; const reel = { separator_s: gap, takes: [] };
-  takes.forEach((tk, k) => { const d = audioDurationMs(tk.file) / 1000; reel.takes.push({ file: basename(tk.file), reel_start_s: +t.toFixed(3), duration_s: +d.toFixed(3) }); t += d + gap; });
+  takes.forEach((tk) => { const d = tk.frames / fps; reel.takes.push({ file: basename(tk.file), reel_start_s: +t.toFixed(4), duration_s: +d.toFixed(4) }); t += d + gap; });
   writeJson(meta, reel);
   return { file: out, reel };
 }

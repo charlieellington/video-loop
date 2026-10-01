@@ -12,7 +12,8 @@ import { Failure } from "./util.mjs";
  * @param words  [{i,text,start_ms,end_ms}]
  * @param inserts [{kind:"hook"|"interlude", after_word_i?, dur_ms, ...}]  (hook goes first)
  */
-export function buildTimeline(cuts, words, inserts = []) {
+export function buildTimeline(cuts, words, inserts = [], { fps = null } = {}) {
+  const snap = (ms) => (fps ? Math.round(Math.round(ms * fps / 1000) * 1000 / fps) : ms);   // insert points sit on picture frames
   const segs = cuts.segments; const outStart = []; let acc = 0;
   segs.forEach((s) => { outStart.push(acc); acc += s.out_ms - s.in_ms; });
   const cutDur = acc;
@@ -24,7 +25,7 @@ export function buildTimeline(cuts, words, inserts = []) {
     const s = segs[k];
     return outStart[k] + ((i === s.last_word_i ? s.out_ms : Math.min(words[i].end_ms, s.out_ms)) - s.in_ms);
   };
-  const placed = inserts.map((x) => ({ ...x, at_cut_ms: x.kind === "hook" ? 0 : afterWord(x.after_word_i) }))
+  const placed = inserts.map((x) => ({ ...x, at_cut_ms: x.kind === "hook" ? 0 : snap(afterWord(x.after_word_i)) }))
     .sort((a, b) => a.at_cut_ms - b.at_cut_ms || (a.kind === "hook" ? -1 : 1));
   // final start of each insert = its cut position + everything inserted before it
   let shift = 0; for (const x of placed) { x.at_final_ms = x.at_cut_ms + shift; shift += x.dur_ms; }

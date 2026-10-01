@@ -58,8 +58,8 @@ export function mixSoundtrack({ voice, ambience, inserts, music, cfg, tl, out, m
   const gv = target - vI;
   let gm = null, musicI = null;
   if (music) { musicI = measureLoudness(music.file).I; gm = target + cfg.music.level_db - musicI; }
-  const limit = Math.pow(10, (ceil - 1.5) / 20);   // sample-peak limit with headroom for inter-sample/AAC overshoot (final file is re-measured)
-  const build = (corr) => {
+  // alimiter limits SAMPLE peaks; true (inter-sample) peaks can overshoot, so the limit is lowered until the measured TP fits
+  const build = (corr, limitDb) => { const limit = Math.pow(10, limitDb / 20);
     const inputs = ["-i", voice]; const p = [`[0:a]volume=${(gv + corr).toFixed(2)}dB,aformat=channel_layouts=stereo,asplit=2[key][vo]`]; const mixIn = ["[vo]"]; let n = 1;
     for (const s of [ambience, inserts]) if (s) { inputs.push("-i", s); p.push(`[${n}:a]volume=${corr.toFixed(2)}dB,aformat=channel_layouts=stereo[s${n}]`); mixIn.push(`[s${n}]`); n++; }
     if (music) {
@@ -76,11 +76,16 @@ export function mixSoundtrack({ voice, ambience, inserts, music, cfg, tl, out, m
     return measureLoudness(out);
   };
   // measured gain, then up to three corrective passes (limiting shaves loudness off peaky speech)
-  let corr = 0, L = build(0);
-  for (let pass = 0; pass < 3 && Math.abs(L.I - target) > 0.3; pass++) { corr += target - L.I; L = build(corr); }
+  let corr = 0, limitDb = ceil - 1.5, L = build(corr, limitDb);
+  for (let pass = 0; pass < 5; pass++) {
+    const loud = Math.abs(L.I - target) > 0.3, peak = L.TP > ceil - 0.5;   // 0.5 dB margin for the AAC encode
+    if (!loud && !peak) break;
+    if (peak) limitDb -= L.TP - (ceil - 0.5) + 0.2;
+    corr += target - L.I; L = build(corr, limitDb);
+  }
   const res = { voice_lufs_raw: vI, voice_gain_db: +(gv + corr).toFixed(2), music_lufs_raw: musicI, music_gain_db: gm == null ? null : +(gm + corr).toFixed(2),
     music_level_vs_voice_db: music ? cfg.music.level_db : null, ducking: music ? cfg.music.ducking : null, placement: music ? cfg.music.placement : null,
-    mix_lufs: L.I, mix_true_peak_db: L.TP, mix_lra: L.LRA, target_lufs: target, ceiling_dbtp: ceil };
+    mix_lufs: L.I, mix_true_peak_db: L.TP, mix_lra: L.LRA, target_lufs: target, ceiling_dbtp: ceil, limiter_dbfs: +limitDb.toFixed(2) };
   log(`MIX: voice ${vI.toFixed(1)} LUFS raw → ${res.voice_gain_db >= 0 ? "+" : ""}${res.voice_gain_db} dB${music ? ` · music ${cfg.music.level_db} dB under the voice (${cfg.music.placement}${cfg.music.ducking ? ", ducked" : ""})` : " · no music"} → ${L.I} LUFS, ${L.TP} dBTP`);
   const problems = [];
   if (Math.abs(L.I - target) > 1) problems.push(`mix is ${L.I} LUFS, more than 1 LU from ${target}`);

@@ -19,9 +19,9 @@ const FILLERS = {
 /**
  * @param words  [{i,text,start_ms,end_ms}]
  * @param edit   {transcript_sha256, segments:[{first_word_i,last_word_i,reason}]}
- * @param opts   {transcriptSha, mediaDurMs, language, reel, preHandle, postHandle}
+ * @param opts   {transcriptSha, mediaDurMs, language, reel, preHandle, postHandle, fps (snap cuts to frames)}
  */
-export function resolveCuts(words, edit, { transcriptSha, mediaDurMs, language = "", reel = null, preHandle = 60, postHandle = 120 }) {
+export function resolveCuts(words, edit, { transcriptSha, mediaDurMs, language = "", reel = null, preHandle = 60, postHandle = 120, fps = null }) {
   const fail = (m) => { throw new Failure(`edit plan problem: ${m}`, ["fix edit.json in the current revision, then run board again"]); };
   if (edit.transcript_sha256 !== transcriptSha) fail(
     `edit.json was written against a different transcript.\n  edit expects : ${edit.transcript_sha256}\n  transcript is: ${transcriptSha}\n  Word numbers no longer point at the same words (or the timings moved). Re-read the transcript and rewrite the segments.`);
@@ -67,6 +67,13 @@ export function resolveCuts(words, edit, { transcriptSha, mediaDurMs, language =
     if (s.out_ms - s.in_ms < MIN_SEG_MS) fail(`segment ${k}: ${s.out_ms - s.in_ms} ms is shorter than ${MIN_SEG_MS} ms`);
     if (s.in_ms < 0 || s.out_ms > mediaDurMs) fail(`segment ${k}: [${s.in_ms},${s.out_ms}] outside the recording 0..${mediaDurMs}`);
     if (k > 0 && s.in_ms < out[k - 1].out_ms) fail(`segment ${k}: starts before segment ${k - 1} ends`);
+  });
+  // Snap every cut to the picture's frame grid, so sound and picture are cut at the SAME instants.
+  // (Picture trims can only start on a frame; cutting the sound between frames slid the two apart
+  // by up to a frame per segment — measured 33–67 ms on the talking-head fixture.)
+  if (fps) out.forEach((s) => {
+    s.in_frame = Math.round(s.in_ms * fps / 1000); s.out_frame = Math.round(s.out_ms * fps / 1000);
+    s.in_ms = Math.round(s.in_frame * 1000 / fps); s.out_ms = Math.min(Math.round(s.out_frame * 1000 / fps), mediaDurMs);
   });
   const expected = out.reduce((t, s) => t + (s.out_ms - s.in_ms), 0);
   return { transcript_sha256: transcriptSha, media_duration_ms: mediaDurMs, expected_duration_ms: expected, segments: out };

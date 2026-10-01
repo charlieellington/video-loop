@@ -44,9 +44,9 @@ export async function preparePlan(ctx, { needEdit = true } = {}) {
   if (edit.contract && edit.contract !== EDIT_CONTRACT) throw new Failure(`edit.json contract "${edit.contract}" is not ${EDIT_CONTRACT}`);
   const spine = buildSpine(ctx, narr);
   const cuts = resolveCuts(words, edit, { transcriptSha: prov.transcript_sha256, mediaDurMs: durationMs(spine.file), language: prov.language,
-    reel: spine.reel, preHandle: cfg.editorial.pre_handle_ms, postHandle: cfg.editorial.post_handle_ms });
+    reel: spine.reel, preHandle: cfg.editorial.pre_handle_ms, postHandle: cfg.editorial.post_handle_ms, fps: cfg.canvas.fps });
   const { specs: inserts, notes: insertNotes } = insertSpecs(edit, cfg);
-  const tl = buildTimeline(cuts, words, inserts);
+  const tl = buildTimeline(cuts, words, inserts, { fps: cfg.canvas.fps });
   const covers = edit.covers ?? [];
   const resolvedCovers = checkCoverMedia(covers, ctx.paths);
   const cov = coverWindows(tl, words, covers, { holdGapMs: cfg.editorial.hold_gap_ms, fullCover: cfg.editorial.full_cover || !spine.hasOwnPicture });

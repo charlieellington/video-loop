@@ -31,6 +31,7 @@ export function fitChain(label, W, H, fit, out) {
 
 /** The picture of the kept segments (no audio). */
 export function renderPicture({ cuts, spine, cfg, scale, out, hdr = false }) {
+  if (cuts.segments.some((s) => s.in_frame == null)) throw new Failure("internal: cuts are not snapped to frames");
   const { W, H } = renderSize(cfg, scale); const fps = cfg.canvas.fps;
   const own = spine.hasOwnPicture; const grade = own ? GRADES[cfg.presentation.grade] : null;
   const parts = []; let punch = false; const pattern = [];
@@ -38,12 +39,14 @@ export function renderPicture({ cuts, spine, cfg, scale, out, hdr = false }) {
     const durS = (s.out_ms - s.in_ms) / 1000;
     if (cfg.editorial.punch_in && k > 0 && durS >= MIN_PUNCH_TOGGLE_S) punch = !punch;
     pattern.push(punch ? "Z" : "·");
-    const chain = [`trim=start=${sec(s.in_ms)}:end=${sec(s.out_ms)}`, "setpts=PTS-STARTPTS", ...(hdr ? [HDR_TONEMAP] : []), `fps=${fps}`];
-    parts.push(`[0:v]${chain.join(",")}[r${k}]`);
+    // frame-exact: the spine is first put on the canvas frame grid, then cut by frame number
+    const chain = [`trim=start_frame=${s.in_frame}:end_frame=${s.out_frame}`, "setpts=PTS-STARTPTS", ...(hdr ? [HDR_TONEMAP] : [])];
+    parts.push(`[g${k}]${chain.join(",")}[r${k}]`);
     parts.push(fitChain(`r${k}`, W, H, own ? cfg.canvas.fit : "crop", `f${k}`));
     const post = [...(punch ? [`scale=trunc(iw*${ZOOM}/2)*2:trunc(ih*${ZOOM}/2)*2`, `crop=${W}:${H}:(in_w-${W})/2:(in_h-${H})*${CROP_TOP_BIAS}`] : []), ...(grade ? [grade] : []), "format=yuv420p", "setsar=1"];
     parts.push(`[f${k}]${post.join(",")}[v${k}]`);
   });
+  parts.unshift(`[0:v]fps=${fps},split=${cuts.segments.length}${cuts.segments.map((_, k) => `[g${k}]`).join("")}`);
   parts.push(`${cuts.segments.map((_, k) => `[v${k}]`).join("")}concat=n=${cuts.segments.length}:v=1:a=0[v]`);
   ffmpeg(["-i", spine.file, "-filter_complex", parts.join(";"), "-map", "[v]", "-an",
     "-c:v", "libx264", "-preset", scale < 1 ? "veryfast" : "fast", "-crf", scale < 1 ? "23" : "17", "-pix_fmt", "yuv420p",
