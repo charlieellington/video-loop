@@ -65,6 +65,13 @@ rendered concurrently from outside the repository with no API key, originals unc
   in); it does not grow word by word.
 - Windows, Linux and Intel Macs are untested.
 
+## Fresh-clone rehearsal
+From the Git bundle, into a new folder whose path contains a space, with an empty temporary HOME
+(so no personal configuration or credential files exist) and no `ELEVENLABS_API_KEY`:
+`git clone video-loop.bundle "…/video loop"` → `npm install` → `node bin/video-loop.mjs doctor`
+(OK) → `node bin/video-loop.mjs example "…/my example"` (preview rendered: 540×960 @ 30 fps,
+23.83 s, −14.3 LUFS, −2.41 dBTP, 0 placeholder frames) → `npm test` (20/20 pass).
+
 ## Re-running the measurements
 ```bash
 npm test
