@@ -75,8 +75,29 @@ code and OFL font licences are included. The typing sound's original supersnd/Fr
 checked and labels sample 215744 CC0. This is a bounded release-content review, not a claim that a
 pattern scan proves the absence of every possible secret.
 
-Human listening is explicitly waived for release. No agent audio listening or semantic audio
-inspection is claimed; the measurements and visual inspection are recorded separately.
+Human listening is explicitly waived for release. Automated semantic audio inspection of the
+fictional r002 supplied-music preview (Gemini via AIStudio) reported understandable synthetic
+narration, an audible quieter synth bed, and no obvious clipped words or severe pumping. This is
+a subjective model assessment, not a human listening pass or proof of live Music generation.
+The measurements and visual inspection are recorded separately.
+
+## Public release verification — 5 October 2026
+
+The repository is public at `https://github.com/charlieellington/video-loop` (anonymous HTTP 200).
+A fresh anonymous HTTPS clone at `2c114af` into a path with spaces passed `npm install`, doctor's
+actual caption encode and `node bin/video-loop.mjs example` with an initially empty temporary
+HOME, explicitly selected Node 22.23.2 / FFmpeg-full 9.0.2, and no API key or private configuration.
+An initial minimal PATH omitted npm; adding the already-installed Node binary directory fixed the
+verification environment before installation. No engine change was needed.
+
+The fresh public example rendered at 540×960/30 fps, 23.833 s (−1 ms from its timeline),
+−14.32 LUFS, −2.71 dBTP, 0 placeholder frames and no render warnings. The 21 passing engine
+tests and earlier browser feedback/revision checks remain valid: changes after `4ff6a67` update
+documentation only. Live generated music remains **unproven**, explicitly accepted as a release
+limitation; no further paid Music requests were made.
+
+The fresh clone's own local review server also played and sought the preview and saved a 5-second
+note into the project's feedback JSON. README/docs relative links were checked: none are broken.
 
 ## Automated checks (`npm test`, 21 tests, all passing)
 Core arithmetic and contracts; fake-ElevenLabs failure paths (no key, missing permission, rate
@@ -90,7 +111,7 @@ rendered concurrently from outside the repository with no API key, originals unc
 
 | Check | Result | How it was verified |
 |---|---|---|
-| Clean clone | PASS — see "Fresh-clone rehearsal" below | fresh `git clone` of the bundle into an empty folder, `npm install`, doctor, example, `npm test`; no API key in the environment |
+| Clean clone | PASS — public GitHub and bundle | fresh anonymous public clone at `2c114af`, `npm install`, doctor and offline example with empty temporary HOME/no key; 21 engine tests already passed. Earlier bundle rehearsals are recorded below |
 | Narration and coverage | PASS | `.m4a` audio-only example: 100% covered incl. pauses/tail (pause gaps are refused until covered or deliberately held), 0 placeholder frames in every render, duration Δ ≤ 1 ms vs timeline |
 | Both profiles | PASS | Bene-style example and a fictional Charlie-style talking head (two takes → reel, typed hook, interlude, warm grade, punch-ins, mono-box captions, music moments) through the same engine. With hook/interludes/grade/music switched off, none appear even though the edit plan still contains hook and interlude blocks and the music file exists; 720×1280 @ 25 fps reached the master |
 | Media handling | PASS | paths with spaces and accents (`página 3 – één maan.png`, temp dirs `vl test ü-…`), 576×1024 portrait, 1280×720 landscape, 720×720 square, a clip stored sideways (shown upright), clips with no sound track and with a silent track, an HLG-tagged clip (tone-mapped); media hashes identical before and after rendering |
