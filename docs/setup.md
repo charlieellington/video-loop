@@ -4,7 +4,7 @@ Plain English: what to install, how to check it works, what using ElevenLabs cos
 do when something is missing.
 
 ## 1. Node.js
-Node 20.19 or newer (`.node-version` pins the tested 20.19.5; also tested with 22.23.2).
+Node 20.19–24.x (`.node-version` pins the tested 20.19.5; also tested with 22.23.2).
 `node --version` to check.
 
 ## 2. FFmpeg with libass — read this, it changed

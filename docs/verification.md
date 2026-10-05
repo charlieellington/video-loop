@@ -1,7 +1,8 @@
 # Verification — what was checked for this release, and how
 
 Plain English: the record of what was actually tested on 1 October 2026, what was tested only
-against a fake ElevenLabs, and what was not tested. Each line says which. Re-run the automatic
+against a fake ElevenLabs, and what was not tested, with the 5 October release attempt below.
+Each line says which. Re-run the automatic
 part with `npm test`; the rest with the commands shown.
 
 ## Tested setup
@@ -23,7 +24,46 @@ With Homebrew `ffmpeg-full` 9.0.2 selected through `VIDEO_LOOP_FFMPEG` and `VIDE
 doctor passed its real caption-burn check and all 20 tests passed, including two concurrent
 offline example renders. The default FFmpeg 9.0.2 on PATH still lacks libass; select the full
 build explicitly. No live ElevenLabs calls were made during collection; the music permission
-and human-listening limitations below remain open.
+limitation remained open. Human listening was subsequently explicitly waived
+by Charlie for release; it is not a pending release check.
+
+## Release attempt on 5 October 2026
+
+One actual `music generate` command requested a 26-second instrumental track for the fictional
+book example (`music_v1`, `/v1/music`, `mp3_44100_192`). The explicitly configured operator key was
+valid but the server returned HTTP 401: “missing the permission music_generation”. The environment
+and the documented env-file held the same key. No playable track was returned, no ambiguous
+request was retried, and no additional transcription or isolation was purchased. Available browser
+access required sign-in, so the key permission could not be changed in this session.
+
+**Release remains blocked on that access permission.** Live generation, a mix using the generated
+track, and its reuse across revisions have not passed. The existing file-source example and fake
+provider tests do not substitute for those live checks. Publication and website deployment remain
+pending, including the fresh clone from the actual public GitHub repository.
+
+Automated checks were rerun: doctor's real caption encode passed and all 20 tests passed with no
+skips on Node 22.23.2 and FFmpeg-full 9.0.2. The actual offline example rendered at 540×960/30 fps,
+23.833 s (−1 ms from its timeline), −14.32 LUFS and −2.71 dBTP, with 0 placeholder frames and 0
+clipped samples in either original stereo channel. The narration-envelope comparison against the
+voice-only output found 0 ms start/end lag (correlations 0.926/0.937); this checks presence/alignment,
+not intelligibility. Highlight-caption evidence frames were visually inspected.
+
+A real local browser played and sought the preview and saved a note at 5 s into the project.
+`revise` carried it into r002; lowering the supplied synthetic bed by 6 dB and changing a display
+caption rendered successfully (−14.32 LUFS, −2.73 dBTP, same duration and word cuts). The track hash
+was reused and the r001 preview stayed byte-identical. This is the file-source revision flow;
+generated-track reuse remains unverified live.
+
+The standalone history audit inspected 120 reachable file versions (21 binary versions) across all
+10 commits through `853008e`: no credential values, personal machine paths, private client/planning
+references or absolute imports were found by the targeted scan. The tracked media list was checked
+against the fixture generator and notices; narration and talking-head fixtures are synthetic. MIT
+code and OFL font licences are included. The typing sound's original supersnd/Freesound page was
+checked and labels sample 215744 CC0. This is a bounded release-content review, not a claim that a
+pattern scan proves the absence of every possible secret.
+
+Human listening is explicitly waived for release. No agent audio listening or semantic audio
+inspection is claimed; the measurements and visual inspection are recorded separately.
 
 ## Automated checks (`npm test`, 20 tests, all passing)
 Core arithmetic and contracts; fake-ElevenLabs failure paths (no key, missing permission, rate
@@ -69,9 +109,10 @@ rendered concurrently from outside the repository with no API key, originals unc
   generation passes: enable `music_generation` on the key (or use a key that has it) and run
   `video-loop music generate` on the example with `music.source = "elevenlabs"`.
 - Synthetic narration bridges and the face touch-up from the private pipeline were not extracted.
-- Listening: no human listening pass happened in this unattended build. The measurements above
-  (noise floor, speech retention, loudness, peaks) are not a substitute for listening to the
-  cleaned voice and the mix.
+- Human listening review was explicitly waived by Charlie on 5 October 2026. No human listening
+  pass happened, and none is claimed. Automated measurements (noise floor, speech retention,
+  loudness and peaks) establish only the properties they measure. People making their own videos
+  still review and choose their narration and final preview.
 - The `typewriter-highlight` box shows the whole phrase's box from the phrase start (words fill
   in); it does not grow word by word.
 - Windows, Linux and Intel Macs are untested.

@@ -11,13 +11,14 @@ ElevenLabs feature.
 **What it is not.** It is not a timeline editor and it does not watch your video for you. The
 agent works from the word-timed transcript, contact sheets and still frames — and writes word
 numbers, never timestamps. The engine turns those numbers into exact cuts and refuses anything
-that does not fit. Taste stays with you: nothing renders until you approve the plan, and nothing
-is ever uploaded or posted.
+that does not fit. Taste stays with you: the first cut needs your approval, and the tool never
+posts a finished video.
+ElevenLabs operations send the selected recording or music brief only when you choose them.
 
 ## Requirements
 
 - macOS (tested on macOS 26.3, Apple silicon). Linux should work but is untested.
-- **Node.js 20.19 or newer** (tested 20.19.5).
+- **Node.js 20.19–24.x** (tested 20.19.5 and 22.23.2).
 - **FFmpeg with libass** (captions) — see [docs/setup.md](docs/setup.md). Heads-up: today's default
   Homebrew `ffmpeg` (9.0.x) is built *without* libass. `video-loop doctor` tells you.
 - Optional: an **ElevenLabs API key** for transcription (Scribe), voice cleanup (Audio
