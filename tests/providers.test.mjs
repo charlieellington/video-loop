@@ -116,3 +116,26 @@ test("music: unsupported length is refused before any request; non-audio reply f
     const m = JSON.parse(readFileSync(join(p, ".video-loop", "music.json"), "utf8")); assert.equal(m.request.music_length_ms, 26000); assert.equal(m.ids["song-id"], "fake-song");
   } finally { fake.close(); }
 });
+
+test("music: HTTP 401 credit exhaustion names the funding issue; invalid keys still name authentication", async () => {
+  let n = 0;
+  const fake = await fakeElevenLabs(() => ({ status: 401, body: JSON.stringify({ detail: { message: n++ === 0
+    ? "You have insufficient credits to generate this song. Please upgrade your plan to continue."
+    : "Invalid API key" } }) }));
+  try {
+    const p = tempProject(readFileSync(join(EX, "project.toml"), "utf8").replace(/^schema_version = 1\n/m, "")
+      .replace('source = "file"\nfile = "media/demo-music-bed.m4a"', 'source = "elevenlabs"\nprompt = "soft piano, no drums"'));
+    cpSync(join(EX, "media"), join(p, "media"), { recursive: true });
+    cpSync(join(EX, "plan"), join(p, "plan"), { recursive: true });
+    await cli(["ingest", p]);
+    copyFileSync(join(EX, "plan", "edit.json"), join(p, ".video-loop", "revisions", "r001", "edit.json"));
+    const quota = await cli(["music", "generate", p], env(fake));
+    assert.equal(quota.code, 1);
+    assert.match(quota.out, /insufficient credits.*credit balance and key usage limit/s);
+    assert.doesNotMatch(quota.out, /the API key was rejected/);
+    assert.equal(fake.seen.length, 1, "a refusal is not automatically resent");
+    const invalid = await cli(["music", "generate", p], env(fake));
+    assert.equal(invalid.code, 1);
+    assert.match(invalid.out, /the API key was rejected/);
+  } finally { fake.close(); }
+});

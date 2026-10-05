@@ -93,7 +93,11 @@ function describeHttpError(what, status, bytes, contentType) {
     try { const j = JSON.parse(bytes.toString("utf8")); detail = j.detail?.message ?? j.detail?.status ?? (typeof j.detail === "string" ? j.detail : JSON.stringify(j.detail ?? j)).slice(0, 300); } catch {}
   } else detail = bytes.toString("utf8").slice(0, 200);
   const perm = detail.match(/missing the permission (\w+)/i)?.[1];
+  // The live Music endpoint can return HTTP 401 for exhausted credits too.
+  // Its stated quota error takes precedence over the generic authentication hint.
+  const credits = /insufficient credits|quota[_ -]exceeded|(?:out of|not enough) credits/i.test(detail);
   const hint = perm ? `this API key is valid but lacks the "${perm}" permission — enable it for the key in ElevenLabs (Developers → API keys), or use a key that has it`
+    : credits ? "the account or key has insufficient credits — check your ElevenLabs credit balance and key usage limit, or use a funded key"
     : status === 401 ? "the API key was rejected — check ELEVENLABS_API_KEY"
     : status === 403 ? "this account or key does not have access to this feature (plan or key permissions)"
     : status === 402 ? "the account is out of credits or this feature needs a paid plan"

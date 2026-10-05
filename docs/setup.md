@@ -62,6 +62,7 @@ changes never send it again.
 | `HDR … no zscale/tonemap` | use an FFmpeg with zimg (section 2) or an SDR export of that clip |
 | `… with no picture at 5.90s (near word 19 …)` | a voice-over pause has no picture: add a cover, extend one, or `"hold_until_next": true` |
 | `lacks the "music_generation" permission` | enable it for the key in ElevenLabs, or supply a music file |
+| `insufficient credits` (including HTTP 401 from Music) | check the account credit balance and key usage allowance, add funding through ElevenLabs or use a funded key; no automatic retry |
 | `ended without a clear result — it may or may not have been charged` | check your ElevenLabs usage page, then rerun with `--retry` deliberately |
 | `the approval … no longer matches — changed since approval: …` | something you approved changed; run `board`, look, `approve` again |
 | `the music is 26.0s but the film is 31.0s` | `music generate` again (sized to the new edit) or `music.loop = true` |
