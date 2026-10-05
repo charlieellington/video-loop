@@ -8,6 +8,9 @@ real music mix, you leave notes against the timeline, and the agent makes the ne
 you are happy, it renders the master. Everything stays on your machine unless you choose an
 ElevenLabs feature.
 
+**Website:** [ellington.design/tools/video-loop](https://www.ellington.design/tools/video-loop),
+covering what the loop does, a worked example and a few videos from the workflow it grew from.
+
 **What it is not.** It is not a timeline editor and it does not watch your video for you. The
 agent works from the word-timed transcript, contact sheets and still frames — and writes word
 numbers, never timestamps. The engine turns those numbers into exact cuts and refuses anything
