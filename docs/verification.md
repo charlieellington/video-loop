@@ -48,10 +48,11 @@ balance/key usage limit instead of claiming the key was rejected. A fake-provide
 check verifies this response and preserves the message for a genuinely invalid key. All 21
 automated tests passed after this fix, with no skips on Node 22.23.2 / FFmpeg-full 9.0.2.
 
-**Release remains blocked on Music funding.** Live generation, a mix using the generated track,
-and its reuse across revisions have not passed. The existing file-source example and fake
-provider tests do not substitute for those live checks. Publication and website deployment remain
-pending, including the fresh clone from the actual public GitHub repository.
+Charlie explicitly authorised proceeding with publication on 5 October while showing live Music
+generation as **unproven**. No further paid Music request will be made for this release. Live
+generation, a mix using the generated track, and its reuse across revisions have not passed.
+The existing file-source example and fake-provider tests do not substitute for those live checks.
+Public-clone verification is recorded separately below after publication.
 
 Automated checks were rerun: doctor's real caption encode passed and all 20 tests passed with no
 skips on Node 22.23.2 and FFmpeg-full 9.0.2. The actual offline example rendered at 540×960/30 fps,
@@ -95,7 +96,7 @@ rendered concurrently from outside the repository with no API key, originals unc
 | Media handling | PASS | paths with spaces and accents (`página 3 – één maan.png`, temp dirs `vl test ü-…`), 576×1024 portrait, 1280×720 landscape, 720×720 square, a clip stored sideways (shown upright), clips with no sound track and with a silent track, an HLG-tagged clip (tone-mapped); media hashes identical before and after rendering |
 | Live ElevenLabs — Scribe | PASS (live) | fictional English narration: 76 words, `eng` p=0.97, 0 words outside the known sentence windows; Dutch fixture: 28 words, `nld` p=0.996, 0 outside; cleaned narration: 76 words |
 | Live ElevenLabs — Audio Isolation | PASS (live) | noisy fictional narration (26 s): background −39.3 → −62.0 dB, 100% of speech frames kept, 0 ms shift, 0 ms drift; returned `audio/mpeg` 44.1 kHz; transcript of the cleaned version = clean source except 1 word (75/76 identical, max 40 ms timing difference). Noisy talking head (12 s): −39.2 → −69.5 dB, speech/picture offset identical to the clean source (−60/−65 ms with the sync meter) |
-| Live ElevenLabs — Music | **NOT VERIFIED LIVE** | after Music Generation permission was enabled, the actual 26-second request was refused with HTTP 401 for insufficient credits. Funding is now the blocker. Request sizing, caching/reuse, credit/auth failures, non-audio and timeout handling are covered by fake-server tests; file-source mixing is verified |
+| Live ElevenLabs — Music | **UNPROVEN LIVE — released with explicit waiver** | after Music Generation permission was enabled, the actual 26-second request was refused with HTTP 401 for insufficient credits. No generated audio was returned. Request sizing, caching/reuse, credit/auth failures, non-audio and timeout handling are covered by fake-server tests; file-source mixing is verified |
 | Voice cleanup | PASS | noise reduced, original kept and selectable, loudness-matched comparison page, start/end alignment + drift + speech-retention checks, talking-head sync after cleanup; no repeat isolation on caption/music revisions (cache); switching narration invalidates the transcript binding and the approval |
 | Music behaviour | PASS (file source) | continuous bed under a no-hook voice-over, ducked under speech; revision 2 lowered `level_db` −18 → −24 and every narration pause measured exactly 6.0 dB quieter; no regeneration on caption/volume revisions |
 | Audio failures | PASS (fake server) | as listed under automated checks; continuing with the original is the explicit `voice select original` |
@@ -117,9 +118,10 @@ rendered concurrently from outside the repository with no API key, originals unc
 - Output colour tags were partly unknown; every picture stage now tags bt709.
 
 ## Not covered / limitations
-- Live ElevenLabs Music (funding). Stage 1 is **not fully ready for Bene** until one live music
-  generation passes. Music Generation permission is now enabled; use a key with sufficient account
-  credits and key allowance, then run `video-loop music generate` with `music.source = "elevenlabs"`.
+- Live ElevenLabs Music generation, generated-track mixing and reuse are **unproven**. Charlie
+  explicitly waived this release gate on 5 October and asked to publish with the limitation
+  visible. Supplied-file and no-music paths are verified. A future live check needs a funded key
+  with Music Generation access; no successful generation is claimed for this release.
 - Synthetic narration bridges and the face touch-up from the private pipeline were not extracted.
 - Human listening review was explicitly waived by Charlie on 5 October 2026. No human listening
   pass happened, and none is claimed. Automated measurements (noise floor, speech retention,

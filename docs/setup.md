@@ -16,7 +16,7 @@ own dependency list shows it; `video-loop doctor` fails with "missing: ass"). Ro
 |---|---|
 | Static FFmpeg 9.0.2 for Apple silicon from ffmpeg.martin-riedl.de: download `ffmpeg.zip` and `ffprobe.zip`, unzip anywhere, then `export VIDEO_LOOP_FFMPEG=/path/to/ffmpeg VIDEO_LOOP_FFPROBE=/path/to/ffprobe` | **Verified 1 Oct 2026**: doctor passes, the full example renders. Changes nothing else on the machine. |
 | Homebrew FFmpeg 7.1.1_3 (an older bottle that included libass) | **Verified** on the machine this release was built on. No longer what `brew install ffmpeg` gives you. |
-| Homebrew `ffmpeg-full` (keg-only), selected explicitly as below | **Verified 5 Oct 2026**, version 9.0.2 already installed on the collection Mac: doctor and all 20 tests passed, including offline example renders. Installation itself was not repeated. |
+| Homebrew `ffmpeg-full` (keg-only), selected explicitly as below | **Verified 5 Oct 2026**, version 9.0.2 already installed on the collection Mac: doctor and all 21 tests passed, including offline example renders. Installation itself was not repeated. |
 | Linux distribution FFmpeg (usually built with libass) | Untested. |
 
 Whatever you choose, `node bin/video-loop.mjs doctor` is the judge: it lists every filter the
@@ -47,6 +47,11 @@ ElevenLabs → Developers → API keys, with the permissions for the features yo
 with a message naming the permission). Then either `export ELEVENLABS_API_KEY=…` or put
 `ELEVENLABS_API_KEY=…` in a `.env` file **inside your video project folder** (see `.env.example`).
 video-loop never reads keys from your home directory and never writes them anywhere.
+
+Live Scribe and Audio Isolation were verified. Live Music generation remains **unproven**: the
+release verification request was refused for insufficient credits. Generated-track mixing/reuse
+has not been verified live; supplied-file and no-music flows are tested. See
+[verification.md](verification.md) before choosing generated music.
 
 Costs are usage-based and change; see https://elevenlabs.io/pricing/api. What is sent where:
 - voice cleanup sends **only the narration recording** you chose to clean;

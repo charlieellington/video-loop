@@ -26,6 +26,11 @@ ElevenLabs operations send the selected recording or music brief only when you c
   Without a key you can still use a prepared transcript, your own music file, and no cleanup.
 - Optional: Chromium via Playwright, only for the typed-text opening hook.
 
+**Verification status:** live ElevenLabs transcription and voice cleanup passed. Live Music
+generation is **unproven**: the verification request was refused for insufficient credits, so
+generated-track mixing and reuse have not been verified live. Supplied-file and no-music flows
+are tested. See [the verification record](docs/verification.md) for evidence and limitations.
+
 ## Quick start
 
 ```bash
