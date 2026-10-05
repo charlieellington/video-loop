@@ -4,7 +4,8 @@ Plain English: what to install, how to check it works, what using ElevenLabs cos
 do when something is missing.
 
 ## 1. Node.js
-Node 20.19 or newer (`.node-version` pins the tested 20.19.5). `node --version` to check.
+Node 20.19 or newer (`.node-version` pins the tested 20.19.5; also tested with 22.23.2).
+`node --version` to check.
 
 ## 2. FFmpeg with libass — read this, it changed
 Captions are burned in with libass. **Today's default Homebrew `ffmpeg` (9.0.x) is built without
@@ -15,13 +16,20 @@ own dependency list shows it; `video-loop doctor` fails with "missing: ass"). Ro
 |---|---|
 | Static FFmpeg 9.0.2 for Apple silicon from ffmpeg.martin-riedl.de: download `ffmpeg.zip` and `ffprobe.zip`, unzip anywhere, then `export VIDEO_LOOP_FFMPEG=/path/to/ffmpeg VIDEO_LOOP_FFPROBE=/path/to/ffprobe` | **Verified 1 Oct 2026**: doctor passes, the full example renders. Changes nothing else on the machine. |
 | Homebrew FFmpeg 7.1.1_3 (an older bottle that included libass) | **Verified** on the machine this release was built on. No longer what `brew install ffmpeg` gives you. |
-| `brew install ffmpeg-full` (keg-only; its formula lists libass), then point `VIDEO_LOOP_FFMPEG` / `VIDEO_LOOP_FFPROBE` at `$(brew --prefix ffmpeg-full)/bin/` | Not verified here (installing it could update libraries other tools share). Run doctor after. |
+| Homebrew `ffmpeg-full` (keg-only), selected explicitly as below | **Verified 5 Oct 2026**, version 9.0.2 already installed on the collection Mac: doctor and all 20 tests passed, including offline example renders. Installation itself was not repeated. |
 | Linux distribution FFmpeg (usually built with libass) | Untested. |
 
 Whatever you choose, `node bin/video-loop.mjs doctor` is the judge: it lists every filter the
 engine needs and makes a real one-second encode with a burned caption in a bundled font.
 HDR footage (iPhone HLG/Dolby Vision exports) needs `zscale` + `tonemap` (both routes above have
 them). Without them HDR clips are refused rather than shown washed out; SDR clips are unaffected.
+
+To select an installed `ffmpeg-full` build for the current shell:
+
+```bash
+export VIDEO_LOOP_FFMPEG="$(brew --prefix ffmpeg-full)/bin/ffmpeg"
+export VIDEO_LOOP_FFPROBE="$(brew --prefix ffmpeg-full)/bin/ffprobe"
+```
 
 ## 3. The repository
 ```bash

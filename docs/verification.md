@@ -14,6 +14,17 @@ part with `npm test`; the rest with the commands shown.
 - ElevenLabs: Scribe `scribe_v2` (live), Audio Isolation (live), Music `music_v1` (**live call
   refused**: the available key lacks the `music_generation` permission — see below).
 
+## Collection check on 5 October 2026
+
+Restored the complete repository from the verified Stage 1 bundle at `0a19585` on a second
+Apple-silicon Mac. `npm ci` succeeded. Node 22.23.2 rejected the original `node --test tests/`
+command before discovering tests, so the package script now selects `tests/*.test.mjs` explicitly.
+With Homebrew `ffmpeg-full` 9.0.2 selected through `VIDEO_LOOP_FFMPEG` and `VIDEO_LOOP_FFPROBE`,
+doctor passed its real caption-burn check and all 20 tests passed, including two concurrent
+offline example renders. The default FFmpeg 9.0.2 on PATH still lacks libass; select the full
+build explicitly. No live ElevenLabs calls were made during collection; the music permission
+and human-listening limitations below remain open.
+
 ## Automated checks (`npm test`, 20 tests, all passing)
 Core arithmetic and contracts; fake-ElevenLabs failure paths (no key, missing permission, rate
 limit, timeout with no silent resend and an explicit `--retry`, non-audio and empty replies,
